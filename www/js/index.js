@@ -5,10 +5,39 @@ function onDeviceReady() {
         constructor(team, nick) {
             this.team = team;
             this.nick = nick;
+            if(team=='m') this.icon = mietaGracz;
+            if(team=='f') this.icon = fioletGracz;
         }
     }
+
+//ikony do markerow
+var mieta = L.icon({
+    iconUrl: 'img/mieta-znacznik.png',
+    iconSize: [100, 34],
+    iconAnchor: [50, 0],
+    popupAnchor: [0, 0],
+});
+var fiolet = L.icon({
+    iconUrl: 'img/fiolet-znacznik.png',
+    iconSize: [100, 39],
+    iconAnchor: [50, 0],
+    popupAnchor: [0, 0],
+});
+var mietaGracz = L.icon({
+    iconUrl: 'img/mieta-gracz.png',
+    iconSize: [34, 40],
+    iconAnchor: [0, 0],
+    popupAnchor: [0, 0],
+});
+var fioletGracz = L.icon({
+    iconUrl: 'img/fiolet-gracz.png',
+    iconSize: [36, 40],
+    iconAnchor: [0, 0],
+    popupAnchor: [0, 0],
+});
+
 //dane gracza
-    const player = new Player('m', 'Keira');
+    const player = new Player('f', 'Keira');
     var lat = 0, lon = 0;
 //sprawdzanie czy kontener jest pusty
     var container = L.DomUtil.get('mapid');
@@ -16,6 +45,18 @@ function onDeviceReady() {
     if(container != null){
         container._leaflet_id = null;
     }
+//obsluga getCurrentPosition
+var onSuccess = function(position){
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    PlayerIcon.setLatLng([lat, lon]);
+    mymap.setView([lat, lon]);
+};
+
+var onError = function(error){
+    alert('code: '    + error.code    + '\n' +
+    'message: ' + error.message + '\n');
+};
 
 //ustawienia mapy
     var mymap = L.map('mapid', {
@@ -37,42 +78,28 @@ function onDeviceReady() {
 		tileSize: 512,
 		zoomOffset: -1
 	}).addTo(mymap);
-//obsluga getCurrentPosition
-    var onSuccess = function(position){
-        lat = position.coords.latitude;
-        lon = position.coords.longitude;
-        mymap.setView([lat, lon]);
-    };
-
-    var onError = function(error){
-        alert('code: '    + error.code    + '\n' +
-        'message: ' + error.message + '\n');
-    };
 
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
+//ikona gracza
+    var PlayerIcon = L.marker([0,0],{
+        icon: player.icon
+    }).addTo(mymap);
 
 //zmiana pozycji przy ruchu
 	setInterval(function () {
 		navigator.geolocation.getCurrentPosition(onSuccess, onError);     
 	}, 50);
 
-//ikony do markerow
-    var mieta = L.icon({
-        iconUrl: 'img/mieta-znacznik.png',
-        iconSize: [100, 39],
-        iconAnchor: [0, 0],
-        popupAnchor: [0, 0],
-    });
-    var fiolet = L.icon({
-        iconUrl: 'img/fiolet-znacznik.png',
-        iconSize: [100, 39],
-        iconAnchor: [0, 0],
-        popupAnchor: [0, 0],
-    });
+    //setInterval(function () {
+    //    lat += ((Math.random() - 0.5) / 5000);
+    //    lon += ((Math.random() - 0.5) / 5000);
+    //    PlayerIcon.setLatLng([lat, lon]);
+    //    mymap.setView([lat, lon]);
+    //}, 1000);
 
 //testowe markery
     var marker = L.marker([53.05063, 18.71349],{
-        icon: fiolet
+        icon: mieta
     }).addTo(mymap);
     marker.bindPopup(L.popup({
         closeButton: false,
@@ -104,7 +131,7 @@ function onDeviceReady() {
     }
     function about(marker, distance){
         let color = marker.getIcon();
-        var message = '';
+        let message = '';
         if(color === mieta){
             message += 'Drużyna mietowych<br>';
         }
