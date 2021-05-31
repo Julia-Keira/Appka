@@ -1,0 +1,168 @@
+openapi: 3.0.0
+info:
+  title: Hoshi
+  description: Hoshi API
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+    description: Serwer lokalny API
+paths:
+  /recipe/list:
+    get:
+      summary: Lista przepisów
+      description: Lista wszystkich przepisów
+      tags:
+        - Przepisy
+      responses:
+        '200':
+          description: Zapytanie przetworzone prawidłowo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/recipeList'
+              example:
+                $ref: '#/components/examples/recipeList'
+  /recipe/{id}:
+    put:
+      summary: Edycja przepisu
+      description: Edycja wybranego przepisu
+      tags:
+        - Przepisy
+      parameters:
+        - $ref: '#/components/parameters/recipeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/recipeRequest'
+      responses:
+        '204':
+          description: Zapytanie przetworzone prawidłowo
+        '400':
+          description: Przesłano nieprawidłowe dane
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorFields'
+              example:
+                $ref: '#/components/examples/errorFields'
+        '404':
+          description: Element nie został znaleziony
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorSimple'
+              example:
+                $ref: '#/components/examples/errorSimple'
+components:
+  examples:
+    errorFields:
+      value:
+        errors:
+          - field: name
+            message: Nazwa nie może być pusta.
+          - field: name
+            message: Nazwa nie może mieć mniej niż 3 oraz więcej niż 255 znaków.
+    errorSimple:
+      value:
+        errors:
+          - message: Przepis o podanym identyfikatorze nie istnieje.
+    recipeId:
+      value:
+        id: 1
+    recipeList:
+      value:
+        - id: 1
+          name: Pankejki a'la Gosia
+        - id: 2
+          name: Szarlotka mamy Emila
+        - id: 3
+          name: Mexico by Duszek
+  parameters:
+    recipeId:
+      name: id
+      in: path
+      required: true
+      description: Identyfikator przepisu
+      schema:
+        type: integer
+        format: int32
+  schemas:
+    errorFields:
+      description: Zwrotka z błędami o rozbudowanej strukturze
+      type: object
+      properties:
+        errors:
+          description: Błędy o rozbudowanej strukturze
+          type: array
+          items:
+            description: Pojedynczy błąd o rozbudowanej strukturze
+            type: object
+            properties:
+              field:
+                description: Pole, którego dotyczy błąd
+                type: string
+              message:
+                description: Komunikat błędu
+                type: string
+    errorSimple:
+      description: Zwrotka z błędami o prostej strukturze
+      type: object
+      properties:
+        errors:
+          description: Błędy o prostej strukturze
+          type: array
+          items:
+            description: Pojedynczy błąd o prostej strukturze
+            type: object
+            properties:
+              message:
+                description: Komunikat błędu
+                type: string
+    recipeList:
+      description: Lista przepisów
+      type: array
+      items:
+        description: Przepis
+        type: object
+        properties:
+          id:
+            description: Identyfikator przepisu
+            type: integer
+          name:
+            description: Nazwa przepisu
+            type: string
+    recipeId:
+      description: Szczegóły przepisu
+      type: object
+      properties:
+        id:
+          description: Identyfikator przepisu
+          type: integer
+    recipeRequest:
+      description: Dodanie przepisu
+      type: object
+      properties:
+        name:
+          description: Nazwa przepisu
+          type: string
+        ingredients:
+          description: Składniki przepisu
+          type: array
+          items:
+            description: Składnik przepisu
+            type: object
+            properties:
+              quantity:
+                description: Ilość składnika przepisu
+                type: string
+              unit:
+                description: Jednostka składnika przepisu
+                type: string
+              name:
+                description: Nazwa składnika przepisu
+                type: string
+        description:
+          description: Opis przepisu
+          type: string

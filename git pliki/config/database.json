@@ -1,0 +1,11 @@
+{
+	"database": "hoshi",
+	"username": "root",
+	"password": "",
+	"dialect": "mysql",
+	"define": {
+		"freezeTableName": "true",
+		"paranoid": "true"
+	},
+	"logging": true
+}
