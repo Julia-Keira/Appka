@@ -1,0 +1,36 @@
+{
+  "name": "jishui-node",
+  "version": "1.0.0",
+  "description": "Serwer książki kucharskiej",
+  "homepage": "https://github.com/OptizeTeam/jishui-node#readme",
+  "bugs": {
+    "url": "https://github.com/OptizeTeam/jishui-node/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OptizeTeam/jishui-node.git"
+  },
+  "license": "ISC",
+  "author": "Optize sp. z o.o.",
+  "main": "app.js",
+  "scripts": {
+    "migrate": "node migrate",
+    "start": "node app"
+  },
+  "dependencies": {
+    "ajv": "^6.11.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-validator": "^5.3.1",
+    "grunt": "^1.4.0",
+    "helmet": "^3.21.2",
+    "http-status-codes": "^1.4.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "path": "^0.12.7",
+    "sequelize": "^4.44.3",
+    "sphinxapi": "^1.3.0"
+  }
+}
