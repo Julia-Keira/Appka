@@ -85,7 +85,6 @@ class Point {
 						team: point.team,
 					});
 				});
-
 				return resolve(pointsResponse);
 			}).catch(reject);
 		});
